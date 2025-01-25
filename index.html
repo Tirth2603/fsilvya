@@ -33,7 +33,14 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .shuffle-button {
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .main-button {
             background-color: #ff4757;
             color: #fff;
             padding: 10px 20px;
@@ -43,10 +50,9 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
-            margin-top: 10px;
         }
 
-        .shuffle-button:hover {
+        .main-button:hover {
             background-color: #ff6b81;
         }
 
@@ -68,7 +74,7 @@
         .card-inner {
             position: relative;
             width: 100%;
-            aspect-ratio: 2 / 3; /* Maintain a card-like aspect ratio */
+            aspect-ratio: 2 / 3;
             text-align: center;
             transition: transform 0.6s;
             transform-style: preserve-3d;
@@ -112,7 +118,7 @@
                 font-size: 1.5rem;
             }
 
-            .shuffle-button {
+            .main-button {
                 font-size: 0.9rem;
                 padding: 8px 16px;
             }
@@ -122,7 +128,7 @@
             }
 
             .container {
-                padding: 10px; /* Add extra padding for small screens */
+                padding: 10px;
             }
         }
     </style>
@@ -130,32 +136,38 @@
 <body>
     <header>
         <h1>Fun Intense Card Flip</h1>
-        <button class="shuffle-button" id="shuffle-button">Shuffle Cards</button>
+        <div class="button-container">
+            <button class="main-button" id="makeout-button">Makeout</button>
+            <button class="main-button" id="positions-button">Positions</button>
+        </div>
     </header>
     <div class="container" id="card-container"></div>
 
     <script>
         const cardContainer = document.getElementById('card-container');
-        const shuffleButton = document.getElementById('shuffle-button');
-        const positions = [
-            "69", "Lip biting", "Tit licking", "Eat the clit", "Scissors", "Soft smooth kisses",
-            "Sensual kisses", "Inner thigh kisses", "Slow undressing", "Corkscrew", "Lick neck",
-            "BJ", "Doggy style", "Ice cube foreplay", "Hair pulling (gently)", "Sit on face",
-            "Breast teasing", "Whisper in ear", "Lotus position", "Tickle gently", "Kiss passionately",
-            "Soft bites", "Kiss on butts", "Play with pussy", "Fun with boobs", "Tickle fight",
-            "Run hands over body", "Eat it", "Bridge", "Reverse cowgirl", "Face off", "Spanking",
-            "T-bone", "Standing", "squeeze the person", "Hip grabs", "Belly Eating", "Blind folding",
-            "just rub with dick", "Butterfly", "watch porn together", "eating with handcuffs",
-            "Ear nibbling", "Make-out marathon", "Explore slowly", "Missionary", "Back kiss",
-            "Roleplay fun", "Eye contact play", "Foot kisses", "Cowgirl", "Slaps", "soft fingers",
-            "Belly kisses", "Spooning", "just rub with hands"
+        const makeoutButton = document.getElementById('makeout-button');
+        const positionsButton = document.getElementById('positions-button');
+
+        const makeoutItems = [
+            "Lip biting", "Soft smooth kisses", "Sensual kisses", "Inner thigh kisses", "Slow undressing",
+            "Lick neck", "Ice cube foreplay", "Hair pulling (gently)", "Whisper in ear",
+            "Tickle gently", "Kiss passionately", "Soft bites", "Kiss on butts", "Fun with boobs",
+            "Tickle fight", "Run hands over body", "Make-out marathon", "Explore slowly",
+            "Back kiss", "Roleplay fun", "Eye contact play", "Foot kisses", "Belly kisses"
         ];
 
-        let cardValues = [...positions]; // Copy of the positions array
+        const positionItems = [
+            "69", "Tit licking", "Scissors", "Corkscrew", "BJ", "Doggy style", "Sit on face",
+            "Lotus position", "Bridge", "Reverse cowgirl", "Face off", "Spanking", "T-bone",
+            "Standing", "Hip grabs", "Butterfly", "Missionary", "Cowgirl", "Slaps", "Spooning"
+        ];
 
-        function initializeCards() {
+        let currentList = []; // Active list being displayed
+
+        function initializeCards(list) {
+            currentList = list;
             cardContainer.innerHTML = '';
-            cardValues.forEach((value, index) => {
+            list.forEach((value, index) => {
                 const card = document.createElement('div');
                 card.classList.add('card');
                 card.innerHTML = `
@@ -171,15 +183,22 @@
                     cardInner.classList.toggle('is-flipped');
                 });
             });
+
+            // Add shuffle button below cards
+            const shuffleButton = document.createElement('button');
+            shuffleButton.className = 'main-button';
+            shuffleButton.innerText = 'Shuffle Cards';
+            shuffleButton.addEventListener('click', () => shuffleCards(list));
+            cardContainer.appendChild(shuffleButton);
         }
 
-        function shuffleCards() {
-            cardValues = cardValues.sort(() => Math.random() - 0.5);
-            initializeCards();
+        function shuffleCards(list) {
+            const shuffled = list.sort(() => Math.random() - 0.5);
+            initializeCards(shuffled);
         }
 
-        initializeCards();
-        shuffleButton.addEventListener('click', shuffleCards);
+        makeoutButton.addEventListener('click', () => initializeCards(makeoutItems));
+        positionsButton.addEventListener('click', () => initializeCards(positionItems));
     </script>
 </body>
 </html>
